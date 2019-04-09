@@ -38,31 +38,51 @@ function drill3() {
   BST.insert(2, 2);
   BST.insert(5, 5);
   BST.insert(7, 7);
-  treeHeight(BST);
+  console.log(treeHeight(BST));
 }
 
 function treeHeight(bst) {
-  let leftCount = 0;
-  let rightCount = 0;
+  let leftCount = 1;
+  let rightCount = 1;
 
-  const rightSide = (bst, rightCount=0) => {
-    
-    if (bst.right !== null) {
+  const rightSide = (bst, rightCount) => {
+    if (bst.right !== null && bst.left !== null) {
       rightCount++;
       bst = bst.right;
-      rightSide(bst, leftCount);
-    }
+      if (bst.left !== null) {
+        rightCount++;
+        bst = bst.left;
+        rightSide(bst, rightCount);
+      }
 
+      else if (bst.right !== null) {
+        rightCount++;
+        bst = bst.right;
+        rightSide(bst, rightCount);
+
+      } else {
+        rightSide(bst, rightCount);
+      }
+      return rightCount;
+    }
+    
     else if (bst.left !== null) {
       rightCount++;
-      bst = bst.left;
-      rightSide(bst, leftCount);
+      bst = bst.right;
+      rightSide(bst, rightCount);
     }
+    
+    else if (bst.right !== null) {
+      rightCount++;
+      bst = bst.left;
+      rightSide(bst, rightCount);
+    }
+    
     
     return rightCount;
   };
   
-  const leftSide = (bst, leftCount=0) => {
+  const leftSide = (bst, leftCount) => {
     if (bst.right === null && bst.left === null) {
       return leftCount;
     }
@@ -73,24 +93,32 @@ function treeHeight(bst) {
       bst = bst.right;
       leftSide(bst, leftCount);
     }
-  
+    
     else if (bst.left !== null) {
       leftCount++;
       bst = bst.left;
       leftSide(bst, leftCount);
     }
-    
+  
     return leftCount;
   };
+
   // first move through left side of tree
   if (bst.left !== null) {
     leftCount = leftSide(bst, leftCount);
-  }
-  // move through right side of tree
-  if (bst.right !== null) {
     rightCount = rightSide(bst, rightCount);
   }
-  console.log(leftCount, rightCount);
+
+  // move through right side of tree
+  if (bst.right !== null) {
+    leftCount = leftSide(bst, leftCount);
+    rightCount = rightSide(bst, rightCount);
+  }
+  
+  if (leftCount > rightCount) {
+    return leftCount;
+  }
+  return rightCount;
 }
 
 drill3();
