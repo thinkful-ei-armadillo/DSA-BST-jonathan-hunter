@@ -12,16 +12,16 @@ class BinarySearchTree {
       this.key = key;
       this.value = value;
     }
+
     else if (key < this.key) {
-     
       if (this.left === null) {
         this.left = new BinarySearchTree(key, value, this);
       }
-     
       else {
         this.left.insert(key, value);
       }
     }
+      
     else {
       if (this.right === null) {
         this.right = new BinarySearchTree(key, value, this);
@@ -81,6 +81,7 @@ class BinarySearchTree {
       throw new Error('Key Error');
     }
   }
+  
   _replaceWith(node) {
     if (this.parent) {
       if (this === this.parent.left) {
