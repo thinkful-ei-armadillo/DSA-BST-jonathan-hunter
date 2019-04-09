@@ -1,3 +1,5 @@
+'use strict';
+
 const BinarySearchTree = require('./binary-search-tree');
 
 function drill1() {
@@ -11,7 +13,6 @@ function drill1() {
   BST.insert(5, 5);
   BST.insert(7, 7);
 }
-
 
 function drill2() {
   let BST = new BinarySearchTree();
@@ -39,7 +40,7 @@ function drill3() {
   BST.insert(2, 2);
   BST.insert(5, 5);
   BST.insert(7, 7);
-  console.log(treeHeightTest(BST));
+  // console.log(treeHeightTest(BST));
 }
 
 function drill4() {
@@ -54,29 +55,22 @@ function drill4() {
   testBST.insert(7, 7);
 
   const root = testBST.key;
-  const isBST = (testBST) => {
-
+  const isBST = testBST => {
     if (testBST.left !== null) {
       if (testBST.key > root) {
         return false;
-      }
-      else if (testBST.key < root) {
+      } else if (testBST.key < root) {
         isBST(testBST.left);
-      }
-      else {
+      } else {
         return true;
       }
-    }
-    
-    else if (testBST.right !== null) {
-      if (testBST.key < root) {    
+    } else if (testBST.right !== null) {
+      if (testBST.key < root) {
         return;
-      }
-      else if (testBST.key >= root) {
+      } else if (testBST.key >= root) {
         isBST(testBST.right);
-      }
-      else {
-        console.log('i ran')
+      } else {
+        console.log('i ran');
         return true;
       }
       return false;
@@ -85,107 +79,43 @@ function drill4() {
   console.log(isBST(testBST));
 }
 
-function treeHeight(bst) {
-  let leftCount = 1;
-  let rightCount = 1;
-
-  const rightSide = (bst, rightCount) => {
-    if (bst.right !== null && bst.left !== null) {
-      rightCount++;
-      bst = bst.right;
-      if (bst.left !== null) {
-        rightCount++;
-        bst = bst.left;
-        rightSide(bst, rightCount);
-      }
-      
-      else if (bst.right !== null) {
-        rightCount++;
-        bst = bst.right;
-        rightSide(bst, rightCount);
-
-      } else {
-        rightSide(bst, rightCount);
-      }
-      return rightCount;
-    }
-    
-    else if (bst.left !== null) {
-      rightCount++;
-      bst = bst.right;
-      return rightSide(bst, rightCount);
-    }
-    
-    else if (bst.right !== null) {
-      rightCount++;
-      bst = bst.left;
-      return rightSide(bst, rightCount);
-    }
-    
-    
-    return rightCount;
-  };
-  
-  const leftSide = (bst, leftCount) => {
-    if (bst.right !== null && bst.left !== null) {
-      
-      if (bst.right !== null) {
-        leftCount++;
-        bst = bst.right;
-        return leftSide(bst, leftCount);
-      }
-      
-      else if (bst.left !== null) {
-        leftCount++;
-        bst = bst.left;
-        leftSide(bst, leftCount);
-      }
-
-      if (bst.right !== null) {
-        leftCount++;
-        bst = bst.right;
-        leftSide(bst, leftCount);
-
-      } else if (bst.left !== null) {
-        leftCount++;
-        bst = bst.left;
-        leftSide(bst, leftCount);
-      }
-      console.log({leftCount, rightCount})
-      return leftCount;
-    }
-    // after right side check is done move to left side
-    return leftCount;
-  };
-
-  // first move through left side of tree
-  if (bst.left !== null) {
-    leftCount = leftSide(bst, leftCount);
-  } 
-
-  // move through right side of tree
-  if (bst.right !== null) {
-    rightCount = rightSide(bst, rightCount);
-  }
-  console.log({leftCount, rightCount})
-  if (leftCount > rightCount) {
-    return leftCount;
-  }
-  return rightCount;
-}
-
-
 function treeHeightTest(bst) {
   if (!bst) {
     return 0;
   }
-  
+
   let lengthL = treeHeightTest(bst.left);
   let lengthR = treeHeightTest(bst.right);
-  
-  return 1 + Math.max(lengthL, lengthR);
 
+  return 1 + Math.max(lengthL, lengthR);
 }
 
-//drill3();
+function drill5() {
+  let BST = new BinarySearchTree();
+  BST.insert(3, 3);
+  BST.insert(1, 1);
+  BST.insert(4, 4);
+  BST.insert(6, 6);
+  BST.insert(9, 9);
+  BST.insert(2, 2);
+  BST.insert(5, 5);
+  BST.insert(7, 7);
+  const arr = [];
+
+  const thirdLargest = bst => {
+    if (bst.left !== null) {
+      arr.push(bst.left.key);
+      thirdLargest(bst.left);
+    }
+    if (bst.right !== null) {
+      arr.push(bst.right.key);
+      thirdLargest(bst.right);
+    }
+  };
+  thirdLargest(BST);
+  arr.push(BST.key);
+  return arr.sort()[arr.length - 3];
+}
+
+// console.log(drill5());
 //drill4();
